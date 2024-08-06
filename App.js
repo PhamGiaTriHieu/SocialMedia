@@ -9,12 +9,12 @@ import React from 'react';
 
 import {SafeAreaView, Text, StyleSheet} from 'react-native';
 import {baseTypography} from './assets/fonts/helper';
+import Title from './components/Title/Title';
 
 const App = () => {
   return (
     <SafeAreaView>
-      <Text style={styles.textStyled1}>Whereas recognition of the</Text>
-      <Text style={styles.textStyled2}>Whereas recognition of the</Text>
+      <Title title="Let’s Explore" />
     </SafeAreaView>
   );
 };
