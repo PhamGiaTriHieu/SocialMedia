@@ -10,6 +10,7 @@ import {
   faMessage,
   faBookmark,
 } from '@fortawesome/free-regular-svg-icons';
+import {horizontalScale, scaleFontSize} from '../../assets/styles/scaling';
 
 const UserPost = props => {
   return (
@@ -17,8 +18,8 @@ const UserPost = props => {
       <View style={style.user}>
         <View style={style.userContainer}>
           <UserProfileImage
-            profileImage={props.proFileImage}
-            imageDimensions={48}
+            profileImage={props.profileImage}
+            imageDimensions={horizontalScale(48)}
           />
           <View style={style.userTextContainer}>
             <Text style={style.username}>
@@ -29,29 +30,29 @@ const UserPost = props => {
             )}
           </View>
         </View>
-        <FontAwesomeIcon icon={faEllipsisH} color="#79869F" size={24} />
+        <FontAwesomeIcon
+          icon={faEllipsisH}
+          color="#79869F"
+          size={scaleFontSize(24)}
+        />
       </View>
       <View style={style.postImage}>
         <Image source={props.image} />
       </View>
-      <View style={{marginLeft: 10, flexDirection: 'row'}}>
-        <View style={{flexDirection: 'row'}}>
+      <View style={style.userPostStats}>
+        <View style={style.userPostStatButton}>
           <FontAwesomeIcon icon={faHeart} color="#79869F" />
-          <Text style={{marginLeft: 3, color: '#79869F'}}>{props.likes}</Text>
+          <Text style={style.userPostStatText}>{props.likes}</Text>
         </View>
 
-        <View style={{flexDirection: 'row', marginLeft: 27}}>
+        <View style={style.userPostStatButtonRight}>
           <FontAwesomeIcon icon={faMessage} color="#79869F" />
-          <Text style={{marginLeft: 3, color: '#79869F'}}>
-            {props.comments}
-          </Text>
+          <Text style={style.userPostStatText}>{props.comments}</Text>
         </View>
 
-        <View style={{flexDirection: 'row', marginLeft: 27}}>
+        <View style={style.userPostStatButtonRight}>
           <FontAwesomeIcon icon={faBookmark} color="#79869F" />
-          <Text style={{marginLeft: 3, color: '#79869F'}}>
-            {props.bookmarks}
-          </Text>
+          <Text style={style.userPostStatText}>{props.bookmarks}</Text>
         </View>
       </View>
     </View>

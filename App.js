@@ -10,7 +10,7 @@ import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   View,
-  StyleSheet,
+  Dimensions,
   TouchableOpacity,
   Text,
   FlatList,
@@ -23,6 +23,7 @@ import {globalStyles} from './assets/styles/globalStyle';
 import {userPosts, userStories} from './public/dummyData/dummyData';
 import UserStory from './components/UserStory/UserStory.js';
 import UserPost from './components/UserPost/UserPost.js';
+import {scaleFontSize} from './assets/styles/scaling.js';
 
 const App = () => {
   const userStoriesPageSize = 4;
@@ -30,7 +31,7 @@ const App = () => {
   const [userStoriesRenderedData, setUserStoriesRenderedData] = useState([]);
   const [isLoadingUserStories, setIsLoadingUserStories] = useState(false);
 
-  const userPostsPageSize = 4;
+  const userPostsPageSize = 2;
   const [userPostsCurrentPage, setUserPostsCurrentPage] = useState(1);
   const [userPostRenderedData, setUserPostRenderedData] = useState([]);
   const [isLoadingUserPost, setIsLoadingUserPost] = useState(false);
@@ -52,6 +53,11 @@ const App = () => {
     const getInitialData = pagination(userStories, 1, userStoriesPageSize);
     setUserStoriesRenderedData(getInitialData);
     setIsLoadingUserStories(false);
+
+    setIsLoadingUserPost(true);
+    const getInitialDataPost = pagination(userPosts, 1, userPostsPageSize);
+    setUserPostRenderedData(getInitialDataPost);
+    setIsLoadingUserPost(false);
   }, []);
 
   return (
@@ -67,7 +73,7 @@ const App = () => {
                   <FontAwesomeIcon
                     icon={faEnvelope}
                     color="#898DAE"
-                    size={20}
+                    size={scaleFontSize(20)}
                   />
                   <View style={globalStyles.messageNumberContainer}>
                     <Text style={globalStyles.messageNumber}>2</Text>
@@ -114,11 +120,33 @@ const App = () => {
             </>
           }
           showsVerticalScrollIndicator={false}
-          data={userPosts}
+          onEndReachedThreshold={0.5}
+          onEndReached={() => {
+            if (isLoadingUserPost) {
+              return;
+            }
+            setIsLoadingUserPost(true);
+            console.log('fetching more data...', userPostsCurrentPage + 1);
+            const contentToAppend = pagination(
+              userPosts,
+              userPostsCurrentPage + 1,
+              userPostsPageSize,
+            );
+            if (contentToAppend.length > 0) {
+              setUserPostsCurrentPage(userPostsCurrentPage + 1);
+              setUserPostRenderedData(prev => [...prev, ...contentToAppend]);
+            }
+            setIsLoadingUserPost(false);
+          }}
+          data={userPostRenderedData}
+          // keyExtractor={item => item.id.toString()}
           renderItem={({item}) => {
             return (
-              <View style={globalStyles.userPostContainer}>
+              <View
+                key={'userPost' + item.id}
+                style={globalStyles.userPostContainer}>
                 <UserPost
+                  key={'userPost' + item.id}
                   firstName={item.firstName}
                   lastName={item.lastName}
                   image={item.image}
@@ -126,7 +154,8 @@ const App = () => {
                   bookmarks={item.bookmarks}
                   comments={item.comments}
                   location={item.location}
-                  proFileImage={item.profileImage}
+                  profileImage={item.profileImage}
+                  id={item.id}
                 />
               </View>
             );
@@ -136,18 +165,5 @@ const App = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  // textStyled1: {
-  //   fontFamily: 'Playfair Display',
-  //   fontWeight: '500',
-  //   fontSize: 50,
-  // },
-  // textStyled2: {
-  //   fontFamily: baseTypography.fontFamily,
-  //   fontSize: 50,
-  //   fontWeight: baseTypography.fontWeightSemiBold,
-  // },
-});
 
 export default App;
