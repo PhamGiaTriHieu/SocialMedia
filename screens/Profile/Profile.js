@@ -1,15 +1,46 @@
 import React from 'react';
-import {SafeAreaView, Text, TouchableOpacity} from 'react-native';
+import {Image, SafeAreaView, ScrollView, Text, View} from 'react-native';
 import globalStyle from '../../assets/styles/globalStyle';
-import {Routes} from '../../navigation/Routes';
+import style from './style';
+import {ProfileTabsNavigation} from '../../navigation/MainNavigation';
 
 const Profile = ({navigation}) => {
   return (
     <SafeAreaView style={[globalStyle.backgroundWhite, globalStyle.flex]}>
-      <TouchableOpacity onPress={() => navigation.navigate(Routes.Home)}>
-        <Text style={{color: 'blue'}}>Go Back</Text>
-      </TouchableOpacity>
-      <Text>Welcome to profile page</Text>
+      <ScrollView contentContainerStyle={globalStyle.flexGrow}>
+        <View style={style.profileImageContainer}>
+          <View style={style.profileImageContent}>
+            <Image
+              style={style.profileImage}
+              source={require('../../assets/images/default_profile.png')}
+            />
+          </View>
+        </View>
+        <Text style={style.userName}>Peter Pham (default Name)</Text>
+        <View style={style.statContainer}>
+          <View>
+            <Text style={style.statAmount}>45</Text>
+            <Text style={style.statType}>Following</Text>
+          </View>
+
+          <View style={style.statBorder} />
+
+          <View>
+            <Text style={style.statAmount}>30M</Text>
+            <Text style={style.statType}>Follower</Text>
+          </View>
+
+          <View style={style.statBorder} />
+
+          <View>
+            <Text style={style.statAmount}>100</Text>
+            <Text style={style.statType}>Posts</Text>
+          </View>
+        </View>
+        <View style={globalStyle.flex}>
+          <ProfileTabsNavigation />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
